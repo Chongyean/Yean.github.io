@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Operation</title>
+    <style>
+        body {
+            background-color: rgb(238, 238, 238);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        form input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid lightgray;
+            width: 200px;
+        }
+        #click-button {
+            padding: 10px 20px;
+            background-color: rgb(57, 201, 57);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #click-button:hover {
+            background-color: rgb(50, 180, 50);
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            color: black;
+            text-align: center;
+        }
+        thead th {
+            background-color: rgb(57, 201, 57);
+            color: white;
+            padding: 10px;
+        }
+        tbody td {
+            background-color: white;
+            padding: 10px;
+            border-bottom: 1px solid lightgray;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: rgb(255, 193, 7);
+            color: white;
+        }
+        .delete-btn {
+            background-color: rgb(220, 53, 69);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>CRUD Operation</h1>
+        <form id="input-information">
+            <input type="text" id="enter-name" placeholder="Enter name">
+            <input type="email" id="enter-email" placeholder="Enter email">
+            <button id="click-button" onclick="addRow()" type="button">Add</button>
+        </form>
+    </div>
+    <div>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentId = 1;
+
+        function addRow() {
+            const nameInput = document.getElementById('enter-name').value.trim();
+            const emailInput = document.getElementById('enter-email').value.trim();
+
+            if (!nameInput || !emailInput) {
+                alert('Please enter both name and email!');
+                return;
+            }
+
+            const tableBody = document.querySelector('#myTable tbody');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>${currentId}</td>
+                <td>${nameInput}</td>
+                <td>${emailInput}</td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="editRow(this)">Edit</button>
+                    <button class="action-btn delete-btn" onclick="deleteRow(this)">Delete</button>
+                </td>
+            `;
+
+            tableBody.appendChild(newRow);
+
+            currentId++;
+
+            document.getElementById('enter-name').value = '';
+            document.getElementById('enter-email').value = '';
+        }
+
+        function deleteRow(button) {
+            const row = button.parentElement.parentElement;
+            row.remove(); 
+        }
+
+        function editRow(button) {
+            const row = button.parentElement.parentElement;
+            const name = row.cells[1].innerText;
+            const email = row.cells[2].innerText;
+
+
+            document.getElementById('enter-name').value = name;
+            document.getElementById('enter-email').value = email;
+
+            deleteRow(button);
+        }
+        function updateIds() {
+            const tableBody = document.querySelector('#myTable tbody');
+            const rows = tableBody.rows;
+
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].cells[0].innerText = i + 1;
+            }
+        }
+    </script>
+</body>
+</html>
